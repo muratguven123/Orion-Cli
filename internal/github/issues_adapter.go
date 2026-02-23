@@ -24,10 +24,14 @@ func (a *IssuesAdapter) CreateIssues(owner, repo string, drafts []core.IssueDraf
 	result := make([]core.CreatedIssue, 0, len(drafts))
 
 	for _, draft := range drafts {
+		labels := draft.Labels
+		if labels == nil {
+			labels = []string{}
+		}
 		issueReq := &gh.IssueRequest{
 			Title:  gh.String(draft.Title),
 			Body:   gh.String(draft.Body),
-			Labels: &draft.Labels,
+			Labels: &labels,
 		}
 
 		issue, _, err := a.client.Issues.Create(context.Background(), owner, repo, issueReq)

@@ -24,10 +24,10 @@ func LoadEnv() (Env, error) {
 	}
 
 	if env.GeminiAPIKey == "" {
-		return Env{}, fmt.Errorf("GEMINI_API_KEY eksik. Örnek: export GEMINI_API_KEY='your_api_key'")
+		return Env{}, fmt.Errorf("GEMINI_API_KEY ortam değişkeni tanımlı değil. Lütfen 'set GEMINI_API_KEY=<key>' ile ayarlayın")
 	}
 	if env.GitHubToken == "" {
-		return Env{}, fmt.Errorf("GITHUB_TOKEN eksik. Örnek: export GITHUB_TOKEN='ghp_xxx'")
+		return Env{}, fmt.Errorf("GITHUB_TOKEN ortam değişkeni tanımlı değil. Lütfen 'set GITHUB_TOKEN=<token>' ile ayarlayın")
 	}
 
 	return env, nil

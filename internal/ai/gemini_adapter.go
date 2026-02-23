@@ -12,7 +12,21 @@ import (
 	"orion-cli/internal/core"
 )
 
-const systemPrompt = "Sen bir Technical Product Manager'sın. Verilen metni incele ve bana sadece aşağıdaki JSON formatında bir görev listesi dön. Markdown kullanma, sadece saf JSON dön."
+const systemPrompt = `Sen bir Technical Product Manager'sın. Verilen metni incele ve bana sadece aşağıdaki JSON formatında bir görev listesi dön. Markdown kullanma, sadece saf JSON dön.
+
+Beklenen format (JSON array):
+[
+  {
+    "title": "Kısa ve açık görev başlığı",
+    "body": "Görevin detaylı açıklaması",
+    "labels": ["label1", "label2"]
+  }
+]
+
+Kurallar:
+- "title" alanı kesinlikle boş olmamalı.
+- "labels" boş array olabilir ama null olmamalı.
+- Her görev ayrı bir JSON objesi olmalı.`
 
 type GeminiAdapter struct {
 	apiKey string
@@ -99,11 +113,23 @@ func (g *GeminiAdapter) AnalyzeWithContext(ctx context.Context, text string) ([]
 		return nil, fmt.Errorf("gemini çıktısı JSON değil: %w, içerik: %s", err, jsonText)
 	}
 
-	if len(drafts) == 0 {
+	// Boş title'lı draft'ları filtrele ve nil labels'ları düzelt
+	var validDrafts []core.IssueDraft
+	for _, d := range drafts {
+		if strings.TrimSpace(d.Title) == "" {
+			continue
+		}
+		if d.Labels == nil {
+			d.Labels = []string{}
+		}
+		validDrafts = append(validDrafts, d)
+	}
+
+	if len(validDrafts) == 0 {
 		return nil, fmt.Errorf("gemini görev listesi üretmedi")
 	}
 
-	return drafts, nil
+	return validDrafts, nil
 }
 
 func sanitizeJSON(raw string) string {
