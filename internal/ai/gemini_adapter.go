@@ -32,7 +32,7 @@ func (g *GeminiAdapter) Analyze(text string) ([]core.IssueDraft, error) {
 }
 
 func (g *GeminiAdapter) AnalyzeWithContext(ctx context.Context, text string) ([]core.IssueDraft, error) {
-	endpoint := fmt.Sprintf("https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s", g.model, g.apiKey)
+	endpoint := fmt.Sprintf("https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent", g.model)
 
 	payload := map[string]any{
 		"system_instruction": map[string]any{
@@ -58,6 +58,7 @@ func (g *GeminiAdapter) AnalyzeWithContext(ctx context.Context, text string) ([]
 		return nil, fmt.Errorf("gemini isteği hazırlanamadı: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("x-goog-api-key", g.apiKey)
 
 	resp, err := g.client.Do(req)
 	if err != nil {
