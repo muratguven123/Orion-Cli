@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 type Env struct {
@@ -13,9 +14,9 @@ type Env struct {
 
 func LoadEnv() (Env, error) {
 	env := Env{
-		GeminiAPIKey: os.Getenv("GEMINI_API_KEY"),
-		GitHubToken:  os.Getenv("GITHUB_TOKEN"),
-		GeminiModel:  os.Getenv("GEMINI_MODEL"),
+		GeminiAPIKey: sanitizeEnvValue(os.Getenv("GEMINI_API_KEY")),
+		GitHubToken:  sanitizeEnvValue(os.Getenv("GITHUB_TOKEN")),
+		GeminiModel:  sanitizeEnvValue(os.Getenv("GEMINI_MODEL")),
 	}
 
 	if env.GeminiModel == "" {
@@ -30,4 +31,16 @@ func LoadEnv() (Env, error) {
 	}
 
 	return env, nil
+}
+
+func sanitizeEnvValue(v string) string {
+	trimmed := strings.TrimSpace(v)
+	if len(trimmed) >= 2 {
+		if (trimmed[0] == '\'' && trimmed[len(trimmed)-1] == '\'') ||
+			(trimmed[0] == '"' && trimmed[len(trimmed)-1] == '"') ||
+			(trimmed[0] == '`' && trimmed[len(trimmed)-1] == '`') {
+			return strings.TrimSpace(trimmed[1 : len(trimmed)-1])
+		}
+	}
+	return strings.Trim(trimmed, "'\"")
 }

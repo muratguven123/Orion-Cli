@@ -25,8 +25,8 @@ func (a *IssuesAdapter) CreateIssues(owner, repo string, drafts []core.IssueDraf
 
 	for _, draft := range drafts {
 		issueReq := &gh.IssueRequest{
-			Title:  gh.Ptr(draft.Title),
-			Body:   gh.Ptr(draft.Body),
+			Title:  gh.String(draft.Title),
+			Body:   gh.String(draft.Body),
 			Labels: &draft.Labels,
 		}
 
