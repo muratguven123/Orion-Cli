@@ -1,10 +1,10 @@
-# orion-cli
+# task-agent
 
 Doğal dilde verilen geliştirme görevlerini analiz edip otomatik olarak GitHub Issue'larına dönüştüren yapay zeka destekli CLI aracı.
 
 ## Nedir?
 
-`orion-cli`, yazılım geliştirme süreçlerini hızlandırmak için tasarlanmış bir komut satırı aracıdır. Bir geliştirme görevini doğal dilde yazmanız yeterlidir; araç bu metni Google Gemini yapay zekası aracılığıyla analiz ederek alt görevlere böler ve her birini otomatik olarak bulunduğunuz Git reposundaki GitHub Issues'a açar.
+`task-agent`, yazılım geliştirme süreçlerini hızlandırmak için tasarlanmış bir komut satırı aracıdır. Bir geliştirme görevini doğal dilde yazmanız yeterlidir; araç bu metni Google Gemini yapay zekası aracılığıyla analiz ederek alt görevlere böler ve her birini otomatik olarak bulunduğunuz Git reposundaki GitHub Issues'a açar.
 
 ### Örnek Akış
 
@@ -37,8 +37,8 @@ Kullanıcı → "Kullanıcı kayıt olduğunda RabbitMQ'ya mesaj atacak bir serv
 ### 1. Repoyu klonlayın
 
 ```bash
-git clone https://github.com/muratguven123/Orion-Cli.git
-cd Orion-Cli
+git clone https://github.com/muratguven123/task-agent.git
+cd task-agent
 ```
 
 ### 2. Bağımlılıkları yükleyin
@@ -50,13 +50,13 @@ go mod download
 ### 3. Derleyin
 
 ```bash
-go build -o orion-cli .
+go build -o task-agent .
 ```
 
 İsterseniz binary'yi PATH'inize ekleyin:
 
 ```bash
-mv orion-cli /usr/local/bin/
+mv task-agent /usr/local/bin/
 ```
 
 ## Yapılandırma
@@ -88,7 +88,7 @@ $env:GITHUB_TOKEN="ghp_..."
 Komutun çalıştırılacağı dizin, GitHub'a bağlı bir Git reposu olmalıdır (`.git/config` içinde `origin` remote tanımlı olmalı).
 
 ```bash
-orion-cli task "GÖREV_METNİ"
+task-agent task "GÖREV_METNİ"
 ```
 
 Veya doğrudan Go ile çalıştırmak isterseniz:
@@ -101,13 +101,13 @@ go run . task "GÖREV_METNİ"
 
 ```bash
 # Basit bir özellik planlaması
-orion-cli task "Kullanıcı kayıt olduğunda RabbitMQ'ya mesaj atacak bir servis yaz"
+task-agent task "Kullanıcı kayıt olduğunda RabbitMQ'ya mesaj atacak bir servis yaz"
 
 # Servis mimarisi
-orion-cli task "Ürün kataloğu için REST API yaz, CRUD işlemlerini desteklesin"
+task-agent task "Ürün kataloğu için REST API yaz, CRUD işlemlerini desteklesin"
 
 # Hata takibi
-orion-cli task "Ödeme akışındaki timeout hatalarını araştır ve düzelt"
+task-agent task "Ödeme akışındaki timeout hatalarını araştır ve düzelt"
 ```
 
 ### Örnek Çıktı
